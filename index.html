@@ -2,56 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
-    body { display: flex; flex-direction: column; font-family: sans-serif; background: #f0f0f0; }
-    header {
-      background: #333;
-      color: #fff;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header h1 { font-size: 1.1rem; }
-    header a {
-      color: #fff;
-      text-decoration: none;
-      background: #555;
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-size: 0.9rem;
-    }
-    header a:hover { background: #777; }
-    embed {
-      flex: 1;
-      width: 100%;
-      border: none;
-    }
-    .fallback {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .fallback a {
-      color: #333;
-      font-size: 1rem;
-    }
-  </style>
+  <title>Redirecting…</title>
+  <meta http-equiv="refresh" content="0; url=resume.pdf" />
+  <script>window.location.replace("resume.pdf");</script>
 </head>
 <body>
-  <header>
-    <h1>Resume</h1>
-    <a href="resume.pdf" download>Download PDF</a>
-  </header>
-  <embed src="resume.pdf" type="application/pdf" />
-  <div class="fallback">
-    <p>Your browser cannot display PDFs inline.
-      <a href="resume.pdf">Click here to download the resume.</a>
-    </p>
-  </div>
+  <a href="resume.pdf">Click here if you are not redirected automatically.</a>
 </body>
 </html>
