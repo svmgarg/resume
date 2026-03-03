@@ -26,19 +26,10 @@
       font-size: 0.9rem;
     }
     header a:hover { background: #777; }
-    embed {
+    iframe {
       flex: 1;
       width: 100%;
       border: none;
-    }
-    .fallback {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-    }
-    .fallback a {
-      color: #333;
-      font-size: 1rem;
     }
   </style>
 </head>
@@ -47,11 +38,10 @@
     <h1>Resume</h1>
     <a href="Shivam_Resume.pdf" download>Download PDF</a>
   </header>
-  <embed src="Shivam_Resume.pdf" type="application/pdf" />
-  <div class="fallback">
-    <p>Your browser cannot display PDFs inline.
-      <a href="Shivam_Resume.pdf">Click here to download the resume.</a>
-    </p>
-  </div>
+  <iframe
+    src="https://docs.google.com/viewer?url=https://svmgarg.github.io/resume/Shivam_Resume.pdf&embedded=true"
+    title="Shivam Resume PDF Viewer"
+    allowfullscreen>
+  </iframe>
 </body>
 </html>
