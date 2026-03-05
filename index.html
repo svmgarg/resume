@@ -29,13 +29,19 @@
     header a:hover { background: #777; }
     #pdf-container {
       flex: 1;
-      overflow: hidden;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100%;
+      padding: 16px;
+      gap: 12px;
     }
-    #pdf-viewer {
+    #pdf-container canvas {
+      max-width: 100%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      background: #fff;
+    }
+    #pdf-container embed {
       width: 100%;
       height: 100%;
       border: none;
@@ -48,8 +54,6 @@
       padding: 40px;
       font-size: 1rem;
       gap: 10px;
-      width: 100%;
-      height: 100%;
     }
     #status a {
       color: #fff;
@@ -73,15 +77,74 @@
     <a href="Shivam_Resume.pdf" download>Download PDF</a>
   </header>
   <div id="pdf-container">
-    <embed id="pdf-viewer" src="Shivam_Resume.pdf" type="application/pdf" />
+    <div id="status">Loading…</div>
   </div>
   <script>
-    // Fallback for mobile browsers that don't support embedded PDFs
-    const pdf = document.getElementById('pdf-viewer');
+    // Detect device type
+    function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+             window.innerWidth <= 768;
+    }
+
     const container = document.getElementById('pdf-container');
-    
-    if (!pdf.offsetHeight) {
-      container.innerHTML = '<div id="status">PDF Viewer<br><a href="Shivam_Resume.pdf" download style="color: #fff; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; display: inline-block; margin-top: 20px;">Download PDF</a></div>';
+    const status = document.getElementById('status');
+    const isMobile = isMobileDevice();
+
+    if (isMobile) {
+      // Mobile: Use PDF.js for responsive rendering
+      const link = document.createElement('script');
+      link.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      link.onload = function() {
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        pdfjsLib.getDocument('Shivam_Resume.pdf').promise.then(function (pdf) {
+          status.remove();
+          const pages = [];
+          for (let i = 1; i <= pdf.numPages; i++) {
+            pages.push(i);
+          }
+          return pages.reduce(function (chain, pageNum) {
+            return chain.then(function () { return renderPage(pdf, pageNum); });
+          }, Promise.resolve());
+        }).catch(function (err) {
+          status.textContent = 'Could not load PDF. ';
+          const link = document.createElement('a');
+          link.href = 'Shivam_Resume.pdf';
+          link.download = '';
+          link.textContent = 'Download instead';
+          status.appendChild(link);
+          console.error(err);
+        });
+      };
+      document.head.appendChild(link);
+    } else {
+      // Desktop: Use native PDF viewer with embed
+      container.innerHTML = '<embed id="pdf-viewer" src="Shivam_Resume.pdf" type="application/pdf" />';
+      status.remove();
+    }
+
+    function renderPage(pdf, pageNum) {
+      return pdf.getPage(pageNum).then(function (page) {
+        const style = window.getComputedStyle(container);
+        const containerPadding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+        const containerWidth = container.clientWidth - containerPadding;
+        const unscaled = page.getViewport({ scale: 1 });
+        const scale = containerWidth / unscaled.width;
+        const viewport = page.getViewport({ scale: scale });
+        const dpr = window.devicePixelRatio || 1;
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = Math.floor(viewport.width * dpr);
+        canvas.height = Math.floor(viewport.height * dpr);
+        canvas.style.width = viewport.width + 'px';
+        canvas.style.height = viewport.height + 'px';
+        ctx.scale(dpr, dpr);
+        container.appendChild(canvas);
+
+        return page.render({ canvasContext: ctx, viewport: viewport }).promise;
+      });
     }
   </script>
 </body>
