@@ -73,21 +73,10 @@
     <a href="Shivam_Resume.pdf" download>Download PDF</a>
   </header>
   <div id="pdf-container">
-    <embed id="pdf-viewer" src="Shivam_Resume.pdf" type="application/pdf" />
+    <iframe id="pdf-viewer" src="https://docs.google.com/gview?url=https://svmgarg.github.io/resume/Shivam_Resume.pdf&embedded=true"></iframe>
   </div>
   <script>
     const container = document.getElementById('pdf-container');
-    const pdfViewer = document.getElementById('pdf-viewer');
-
-    // Handle PDF loading error
-    pdfViewer.onerror = function () {
-      container.innerHTML = '<div id="status">Could not load PDF. <a href="Shivam_Resume.pdf" download>Download instead</a></div>';
-    };
-
-    // Fallback for browsers that don't support embed
-    if (!pdfViewer.offsetHeight) {
-      container.innerHTML = '<div id="status">Could not load PDF. <a href="Shivam_Resume.pdf" download>Download instead</a></div>';
-    }
   </script>
 </body>
 </html>
