@@ -73,10 +73,16 @@
     <a href="Shivam_Resume.pdf" download>Download PDF</a>
   </header>
   <div id="pdf-container">
-    <iframe id="pdf-viewer" src="https://docs.google.com/gview?url=https://svmgarg.github.io/resume/Shivam_Resume.pdf&embedded=true"></iframe>
+    <embed id="pdf-viewer" src="Shivam_Resume.pdf" type="application/pdf" />
   </div>
   <script>
+    // Fallback for mobile browsers that don't support embedded PDFs
+    const pdf = document.getElementById('pdf-viewer');
     const container = document.getElementById('pdf-container');
+    
+    if (!pdf.offsetHeight) {
+      container.innerHTML = '<div id="status">PDF Viewer<br><a href="Shivam_Resume.pdf" download style="color: #fff; text-decoration: none; background: #555; padding: 8px 16px; border-radius: 4px; display: inline-block; margin-top: 20px;">Download PDF</a></div>';
+    }
   </script>
 </body>
 </html>
